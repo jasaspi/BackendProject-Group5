@@ -4,6 +4,12 @@ const fetch = require('node-fetch');
 
 const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
 
+app.engine('handlebars', exphbs.engine({
+  defaultLayout: 'main'
+}));
+
+app.set('view engine', 'handlebars');
+
 fetch(apiUrl)
   .then(response => response.json())
   .then(data => {
