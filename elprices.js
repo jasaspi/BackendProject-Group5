@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 // get electric prices and sort them
 const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
 fetch(apiUrl)
