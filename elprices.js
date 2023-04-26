@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+/*const fetch = require('node-fetch');
 
 // get electric prices and sort them
 const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
@@ -22,4 +22,4 @@ fetch(apiUrl)
 // Get current time in UTC
 const now = new Date();
 const utcTime = now.toISOString();
-console.log(utcTime);
+console.log(utcTime);*/

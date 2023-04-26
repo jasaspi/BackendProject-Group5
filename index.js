@@ -33,24 +33,11 @@ passport.deserializeUser(User.deserializeUser());
 
 // Jonna's add ones end here
 
-const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
-
 app.engine('handlebars', exphbs.engine({
   defaultLayout: 'main'
 }));
 
 app.set('view engine', 'handlebars');
-
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    data.prices.sort((a, b) => a.price - b.price);
-
-    console.log(data.prices);
-  });
-
-
-
 
 // Routes and functions added by Jonna
 
@@ -87,13 +74,32 @@ app.get('/user', isLoggedIn, function (req, res) {
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
-  res.redirect("/user");
+  res.redirect("/results");
 }
 
-// Routes adde by Jonna Ends here
+app.post('/user', isLoggedIn, function(req, res) {
+  const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      const departureTime = new Date(req.body.departuretime).getTime();
+      data.prices.sort((a, b) => a.endDate - b.endDate); // check last known time for price - data.prices[0]
+      const twelveHoursAgo = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
+      const filteredData = data.prices.filter(item => item.startDate >= twelveHoursAgo);
+      const estimatedMileage = parseInt(req.body.estimatedmileage);
+      const sortedData = filteredData.sort((a, b) => a.price - b.price);
+      const chosenHours = sortedData.slice(0, estimatedMileage);
+      res.render('results', { chosenHours });
+    })
+    .catch(err => {
+      console.log(err);
+      res.redirect("/results");
+    });
+});
 
-
-
+app.get('/results', function(req, res) {
+  res.render('results');
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`App listening to port ${PORT}`));
