@@ -77,29 +77,38 @@ function isLoggedIn(req, res, next) {
   res.redirect("/results");
 }
 
-app.post('/user', isLoggedIn, function(req, res) {
+
+
+app.post('/user', function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
+  let chosenHours = [];
   fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
       const departureTime = new Date(req.body.departuretime).getTime();
-      data.prices.sort((a, b) => a.endDate - b.endDate); // check last known time for price - data.prices[0]
+      data.prices.sort((a, b) => a.endDate - b.endDate);
       const twelveHoursAgo = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
       const filteredData = data.prices.filter(item => item.startDate >= twelveHoursAgo);
       const estimatedMileage = parseInt(req.body.estimatedmileage);
       const sortedData = filteredData.sort((a, b) => a.price - b.price);
-      const chosenHours = sortedData.slice(0, estimatedMileage);
-      res.render('results', { chosenHours });
+      chosenHours = sortedData.slice(0, estimatedMileage);
+      console.log(chosenHours);
+      res.render('results', { pagetitle: "Post", chosenHours:chosenHours });
     })
     .catch(err => {
-      console.log(err);
+      console.log(err); 
       res.redirect("/results");
     });
 });
 
-app.get('/results', function(req, res) {
-  res.render('results');
-});
+app.get('/results', (req, res) => {
+  res.render('results',
+  {
+      pagetitle: "Get",
+      chosenHours: req.chosenHours
+  });
+})
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`App listening to port ${PORT}`));

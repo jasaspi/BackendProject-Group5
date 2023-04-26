@@ -1,6 +1,10 @@
-<h1>Chosen hours for cheapest electricity prices:</h1>
-<ul>
-  <% chosenHours.forEach(price => { %>
-    <li><%= price.price %> €/kWh (from <%= price.startDate %> to <%= price.endDate %>)</li>
-  <% }) %>
-</ul>
+<h1>Results</h1>
+{{#if chosenHours}}
+  <ul>
+    {{#each chosenHours}}
+      <li>{{this.startDate}} - {{this.endDate}}: {{this.price}} EUR/MWh</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No chosen hours found.</p>
+{{/if}}
