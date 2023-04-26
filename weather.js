@@ -1,6 +1,11 @@
 const fetch = require('node-fetch');
 require('dotenv').config();
 
+/*   Optiot: 
+ 1. Haetaan seuraavan lähtöhetken lämpötila 
+ 2. Jos pakkasta, niin laitetaan aina tunniksi sähköt päälle 
+ 3. Jos pakkasta yli kymmenen astetta, niin kaksi tuntia  */
+
 // const departureTime = require('./index.js'); TODO tämä pitää silputa location urliin
 
 const userLocation = 'Helsinki'; // TODO muuta nämä
@@ -20,7 +25,7 @@ const options = {
   }
 };
 
-const isFreezeng = 'On pakkasta laitetaas'; // mitäs näihin
+const isFreezeng = 'On pakkasta'; // mitäs näihin
 const isMoreFreezing = 'On Pakkasta yli 10C'; // mitäs näihin
 
 
@@ -48,8 +53,3 @@ const getTemperature = async (location, options) => {
 }
 
 getTemperature(location, options);
-
-/*   Optiot: 
- 1. Haetaan seuraavan lähtöhetken lämpötila 
- 2. Jos pakkasta, niin laitetaan aina tunniksi sähköt päälle 
- 3. Jos pakkasta yli kymmenen astetta, niin kaksi tuntia  */
