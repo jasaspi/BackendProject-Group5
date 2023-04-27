@@ -77,22 +77,36 @@ function isLoggedIn(req, res, next) {
   res.redirect("/results");
 }
 
-
+let chosenHours = [];
+let departureTime = new Date();
 
 app.post('/user', function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
-  let chosenHours = [];
+
   fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
-      const departureTime = new Date(req.body.departuretime).getTime();
+
+      departureTime = new Date(req.body.departuretime).getTime();
       data.prices.sort((a, b) => a.endDate - b.endDate);
-      const twelveHoursAgo = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
-      const filteredData = data.prices.filter(item => item.startDate >= twelveHoursAgo);
+      const twelveHoursPrior = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
+      const filteredData = data.prices.filter(item => item.startDate >= twelveHoursPrior);
       const estimatedMileage = parseInt(req.body.estimatedmileage);
+      let neededHours;
+      if (estimatedMileage < 100) {
+        neededHours = 1;
+      } else if (estimatedMileage >= 101 && estimatedMileage <= 200) {
+        neededHours = 2;
+      } else if (estimatedMileage >= 201 && estimatedMileage <= 300) {
+        neededHours = 3;
+      } else if (estimatedMileage >= 301 && estimatedMileage <= 400) {
+        neededHours = 4;
+      } else {
+        neededHours = 5;
+      }
       const sortedData = filteredData.sort((a, b) => a.price - b.price);
-      chosenHours = sortedData.slice(0, estimatedMileage);
-      console.log(chosenHours);
+      chosenHours = sortedData.slice(0, neededHours);
+      //console.log(chosenHours);
       res.render('results', { pagetitle: "Post", chosenHours:chosenHours });
     })
     .catch(err => {
