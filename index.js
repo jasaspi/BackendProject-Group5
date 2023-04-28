@@ -9,6 +9,7 @@ const LocalStrategy = require('passport-local');
 const passportLocalMongoose = require('passport-local-mongoose'); // Vai tarviiko tähän scriptiin
 require('dotenv').config();
 const User = require('./models/User');
+const UserInfo = require('./models/Userinfo');
 const app = express();
 const dbURI = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +''+ process.env.CLUSTER +'.mongodb.net/'+ process.env.DB +'?retryWrites=true&w=majority'
  
