@@ -1,5 +1,11 @@
 <h2>Kirjaudu</h2>
 
+  <div>
+    {{#if messages.error}}
+  <p>{{messages.error}}</p>
+  {{/if}}
+  </div>
+
     <form action="/login" method="POST">
       <label for="username">User name:</label><br />
       <input type="text" id="username" name="username" /><br />

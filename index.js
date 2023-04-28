@@ -5,8 +5,9 @@ const fetch = require('node-fetch');
 // Jonna added ones below to make mongo + user auth working
 const mongoose = require('mongoose');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const passportLocalMongoose = require('passport-local-mongoose'); // Vai tarviiko tähän scriptiin
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+const flash = require('express-flash');
 require('dotenv').config();
 const User = require('./models/User');
 const UserInfo = require('./models/Userinfo');
@@ -15,68 +16,122 @@ const dbURI = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +'
  
 mongoose.connect(dbURI); 
 
-app.use(require("express-session")({
-    secret: "Rusty is a dog",
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(express.json()) // parse json bodies
-app.use(express.urlencoded({extended: false}));
-app.use(express.static('public'));
-
-// Passport initials
-app.use(passport.initialize());
-app.use(passport.session());
-  
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-// Jonna's add ones end here
-
 app.engine('handlebars', exphbs.engine({
   defaultLayout: 'main'
 }));
 
 app.set('view engine', 'handlebars');
 
-// Routes and functions added by Jonna
+app.use(express.json()) // parse json bodies
+app.use(express.urlencoded({extended: false}));
+app.use(express.static('public'));
+app.use(flash());
+
+app.use(session({
+    secret: "This is a secret",
+    resave: false,
+    saveUninitialized: true
+}));
+
+
+// Passport initials
+app.use(passport.initialize());
+app.use(passport.session());
+  
+authUser = async (user, password, done) =>  {
+  const ourUser = await User.findOne({ username: user });
+  if (ourUser) {
+      //check if password matches
+      const result = password === ourUser.password;
+      if (result) {
+        return done (null, ourUser);
+      } else {
+        return done (null, false, { message : "Password incorrect"});
+      }
+    } else {
+      return done (null, false, { message : "User not found" });
+    }
+  
+}
+
+passport.use(new LocalStrategy(authUser));
+
+
+passport.serializeUser( (userObj, done) => {
+    done(null, userObj)
+})
+
+passport.deserializeUser((userObj, done) => {
+    done (null, userObj )
+})
+
+checkAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) { return next() }
+    res.redirect("/login")
+  }
+
+checkLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated()) { 
+         return res.redirect("/user")
+     }
+    next()
+}
+
+
+
+
+
+// ROUTES
+
+// Routes and added by Jonna
 
 //Showing login form
-app.get("/login", function (req, res) {
+app.get("/login", checkLoggedIn, function (req, res) {
   res.render("login");
 });
 
-//Handling user login
-app.post('/login', async function(req, res){
-  try {
-      // check if the user exists
-      const user = await User.findOne({ username: req.body.username });
-      if (user) {
-        //check if password matches
-        const result = req.body.password === user.password;
-        if (result) {
-          res.render('user');
-        } else {
-          res.status(400).json({ error: "password doesn't match" });
-        }
-      } else {
-        res.status(400).json({ error: "User doesn't exist" });
-      }
-    } catch (error) {
-      res.status(400).json({ error });
-    }
-});
+// Handling user login
+app.post ('/login', passport.authenticate('local', {
+  successRedirect: '/user',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
 
 // Showing user page
-app.get('/user', isLoggedIn, function (req, res) {
-  res.render('user');
+app.get('/user', checkAuthenticated, function (req, res) {
+  res.render('user',
+  { user: req.user }
+  );
 });
 
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect("/results");
-}
+// Showing user history page
+app.get('/history', checkAuthenticated, function (req, res) {
+  res.render('history',
+  { username: req.user.username }
+  );
+});
+
+
+//Handling user logout 
+
+app.get('/logout', function (req, res) {
+  req.logout(function(err) {
+      if (err) { 
+          return next(err); 
+      }
+      else {
+          req.session.destroy();
+          res.redirect('/login');
+      }
+      
+    });
+});
+
+
+
+
+
+
 
 let chosenHours = [];
 let departureTime = new Date();
