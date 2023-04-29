@@ -120,10 +120,21 @@ app.get('/user', checkAuthenticated, function (req, res) {
 // Showing user history page
 app.get('/history', checkAuthenticated, function (req, res) {
   res.render('history',
-  { username: req.user.username//,
-    /*history : data*/
+  { 
+    username: req.user.username
   });
 });
+/*
+  // Get by id
+  app.get('/api/products/:id', (req, res) => {
+    const product = data.find((p) => p.id === parseInt(req.params.id));
+    if (!product) {
+      res.sendStatus(404);
+    } else {
+      res.json(product);
+    }
+  });
+*/
 
 //Handling user logout 
 app.get('/logout', function (req, res) {
