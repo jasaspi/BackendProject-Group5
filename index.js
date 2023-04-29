@@ -128,14 +128,11 @@ app.get('/logout', function (req, res) {
 });
 
 
-
-
-
-
-
 let chosenHours = [];
 let departureTime = new Date();
 let departureTimeOut;
+let neededHours;
+let averagePrice;
 
 app.post('/user', function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
@@ -149,7 +146,6 @@ app.post('/user', function(req, res) {
       const twelveHoursPrior = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
       const filteredHours = data.prices.filter(item => item.startDate >= twelveHoursPrior);
       const estimatedMileage = parseInt(req.body.estimatedmileage);
-      let neededHours;
       if (estimatedMileage < 100) {
         neededHours = 1;
       } else if (estimatedMileage >= 101 && estimatedMileage <= 200) {
@@ -161,10 +157,20 @@ app.post('/user', function(req, res) {
       } else {
         neededHours = 5;
       }
+
       const sortedData = filteredHours.sort((a, b) => a.price - b.price);
       chosenHours = sortedData.slice(0, neededHours);
       departureTimeOut = new Date(req.body.departuretime).toISOString();
-      //console.log(chosenHours);
+
+      let sum = 0;
+      for (let i = 0; i < chosenHours.length; i++) {
+        sum += chosenHours[i].price;
+      }
+
+      averagePrice = sum / chosenHours.length;
+      console.log('Average price:', averagePrice.toFixed(3));
+
+      console.log(chosenHours);
       res.render('results', 
         { 
           chosenHours:chosenHours,
