@@ -1,15 +1,10 @@
 <h1>Kirjauduttu sisään onnistuneesti</h1>
-<h2>Syötä seuraava lähtöaika, sekä arvioitu kilometrimäärä</h2>
+<p>Sinut ohjataan eteenpäin hetken kuluttua...</p>
 
-    <form action="/user" method="POST">
-        <label for="departuretime">Departure time:</label><br />
-        <input type="datetime-local" id="departuretime" name="departuretime" /><br /><br />
-        <label for="estimatedmileage">Estimated mileage:</label><br />
-        <input type="text" id="estimatedmileage" name="estimatedmileage" /><br /><br />
-        <button type="submit">Calculate cheapest electricity prices</button>
-    </form>
-
-
-<li><a href="/history">User's history</a></li>
-
-<li><a href="/logout">Logout</a></li>
+<script>
+    // Wait for 3 seconds before redirecting
+    setTimeout(function() {
+        // Redirect to the results page
+        window.location.href = "results";
+    }, 3000);
+</script>

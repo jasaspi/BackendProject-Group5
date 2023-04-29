@@ -1,5 +1,13 @@
-<h2>Results</h2>
-<p>Hours for charging:</p>
+<form action="/user" method="POST">
+    <label for="departuretime">Lähtöaika:</label><br />
+    <input type="datetime-local" id="departuretime" name="departuretime" /><br /><br />
+    <label for="estimatedmileage">Arvioitu matka (km):</label><br />
+    <input type="text" id="estimatedmileage" name="estimatedmileage" /><br /><br />
+    <button type="submit">Hae tarvittavat lataustunnit</button>
+</form>
+
+<h2>Lataukset</h2>
+<p>Valitut tunnit seuraavaa lähtöhetkeä varten:</p>
 {{#if chosenHours}}
   <ul>
     {{#each chosenHours}}
@@ -7,8 +15,8 @@
     {{/each}}
   </ul>
 {{else}}
-  <p>No chosen hours found.</p>
+  <p>Tunteja ei voitu hakea, yritä uudelleen myöhemmin</p>
 {{/if}}
 
-<p>Departure time:</p>
+<p>Lähtöaika (UTC):</p>
 {{this.departureTimeOut}}

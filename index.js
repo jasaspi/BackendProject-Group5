@@ -100,7 +100,7 @@ checkLoggedIn = (req, res, next) => {
 
 //Showing login form
 app.get("/login", checkLoggedIn, function (req, res) {
-  res.render("login");
+  res.render("login", { title: 'Login', layout: 'main' });
 });
 
 // Handling user login
@@ -113,7 +113,7 @@ app.post ('/login', passport.authenticate('local', {
 // Showing user page
 app.get('/user', checkAuthenticated, function (req, res) {
   res.render('user',
-  { user: req.user }
+  { user: req.user, title: 'User', layout: 'main' }
   );
 });
 
@@ -121,7 +121,7 @@ app.get('/user', checkAuthenticated, function (req, res) {
 app.get('/history', checkAuthenticated, function (req, res) {
   res.render('history',
   { 
-    username: req.user.username
+    username: req.user.username, title: 'history', layout: 'main'
   });
 });
 /*
@@ -135,6 +135,14 @@ app.get('/history', checkAuthenticated, function (req, res) {
     }
   });
 */
+
+// Show results page
+app.get('/results', (req, res) => {
+  res.render('results',
+  {
+      chosenHours: req.chosenHours, title: 'results', layout: 'main'
+  });
+})
 
 //Handling user logout 
 app.get('/logout', function (req, res) {
@@ -251,13 +259,6 @@ app.post('/user', function(req, res) {
     }
   });
 */
-
-app.get('/results', (req, res) => {
-  res.render('results',
-  {
-      chosenHours: req.chosenHours
-  });
-})
 
 module.exports = departureTime;
 
