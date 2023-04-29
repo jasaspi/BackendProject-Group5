@@ -125,6 +125,7 @@ app.get('/history', checkAuthenticated, function (req, res) {
 */
 
 // Show results page
+
 app.get('/results', (req, res) => {
   res.render('results',
   {
@@ -153,7 +154,23 @@ let departureTimeOut;
 let neededHours;
 let averagePrice;
 
-app.post('/api/usage_db', function(req, res) {
+// Define the Usage schema
+const UsageSchema = new mongoose.Schema({
+  departureTime: {
+    type: Date,
+  },
+  estimatedMileage: {
+    type: Number,
+  },
+  neededHours: {
+    type: Number,
+  },
+  averagePrice: {
+    type: Number,
+  }
+});
+
+app.post('/results', function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
 
   fetch(apiUrl)
@@ -189,64 +206,32 @@ app.post('/api/usage_db', function(req, res) {
       averagePrice = sum / chosenHours.length;
       console.log('Average price:', averagePrice.toFixed(3));
 
-      console.log(chosenHours);
-      res.render('results', 
-        { 
-          chosenHours:chosenHours,
-          departureTimeOut:departureTimeOut
+      const usageData = {
+        departureTime: departureTime,
+        estimatedMileage: estimatedMileage,
+        neededHours: neededHours,
+        averagePrice: averagePrice
+      };
+      if (mongoose.models.Usage) {
+        delete mongoose.models.Usage;
+      }
+      const Usage = usage_db.model('Usage', UsageSchema);
+      const usage = new Usage(usageData);
+      usage.save()
+        .then(() => {
+          console.log("Tiedot tallennettiin onnistuneesti");
+          res.redirect("/results");
+        })
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/results"); 
         });
-
-    /*
-      // Create - tästä mallia siihen vaiheeseen, kun saadaan tietokanta ylös
-      app.post('/api/products', (req, res) => {
-        const newProduct = {
-          id: data.length + 1,
-          name: req.body.name,
-          description: req.body.description,
-          price: req.body.price,
-          isAvailable: req.body.isAvailable,
-          createdAt: req.body.createdAt,
-          features: req.body.features
-        };
-        data.push(newProduct);
-        res.json(newProduct); 
-      });
-    */
     })
     .catch(err => {
       console.log(err); 
       res.redirect("/results"); 
     });
 });
-
-/* Malliksi aiemmista harjoituksista historia sivua varten, jotta saadaan haettua, luettua, päivitettyä ja poistettua rivejä
-  // Update
-  app.patch('/api/products/:id', (req, res) => {
-    const i = data.findIndex((p) => p.id === parseInt(req.params.id));
-    if (i === -1) {
-      res.sendStatus(404);
-    } else {
-      const updatedProduct = {
-        ...data[i],
-        ...req.body,
-      };
-      data[i] = updatedProduct;
-      res.json(updatedProduct);
-    }
-  });
-  // Delete
-  app.delete('/api/products/:id', (req, res) => {
-    const i = parseInt(req.params.id);
-    //const i = data.findIndex((p) => p.id === parseInt(req.params.id));
-    if (i === -1) {
-      res.sendStatus(404);
-    } else {  
-      data = data.filter((p) => p.id !== i);
-      //data.splice(i, 1);
-      res.sendStatus(204);
-    }
-  });
-*/
 
 module.exports = departureTime;
 
