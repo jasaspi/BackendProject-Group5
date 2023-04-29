@@ -16,14 +16,12 @@ const dbURI = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +'
 const dbURI2 = 'mongodb+srv://' + process.env.DBUSER2 + ':' + process.env.DBPASSWD2 + '' + process.env.CLUSTER2 + '.mongodb.net/' + process.env.DB2 + '?retryWrites=true&w=majority'
 
 mongoose.connect(dbURI)
-  .then(() => console.log('Connected to db1'))
-  .catch(err => console.log('Error connecting to db1:', err));
+  .then(() => console.log('Connected to user_db'))
+  .catch(err => console.log('Error connecting to user_db:', err));
 
-const db2 = mongoose.createConnection(dbURI2, { useNewUrlParser: true, useUnifiedTopology: true });
-  db2.on('error', err => console.log('Error connecting to db2:', err));
-  db2.once('open', () => console.log('Connected to db2'));
-
-mongoose.connect(dbURI); 
+const usage_db = mongoose.createConnection(dbURI2, { useNewUrlParser: true, useUnifiedTopology: true });
+  usage_db.on('error', err => console.log('Error connecting to usage_db:', err));
+  usage_db.once('open', () => console.log('Connected to usage_db'));
 
 app.engine('handlebars', exphbs.engine({
   defaultLayout: 'main'
@@ -155,7 +153,7 @@ let departureTimeOut;
 let neededHours;
 let averagePrice;
 
-app.post('/user', function(req, res) {
+app.post('/api/usage_db', function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
 
   fetch(apiUrl)
