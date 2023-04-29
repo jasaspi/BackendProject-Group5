@@ -13,7 +13,26 @@ const User = require('./models/User');
 const UserInfo = require('./models/Userinfo');
 const app = express();
 const dbURI = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +''+ process.env.CLUSTER +'.mongodb.net/'+ process.env.DB +'?retryWrites=true&w=majority'
- 
+//const dbURI2 = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +''+ process.env.CLUSTER +'.mongodb.net/'+ <databaseName> +'?retryWrites=true&w=majority' 
+
+/* Tämä osa suoraan ChatGPT:stä, jotta saadaan molemmat tietokannat yhdistettyä
+// Connect to DB1
+const db1 = mongoose.createConnection(dbURI1, { useNewUrlParser: true });
+db1.on('error', console.error.bind(console, 'DB1 connection error:'));
+db1.once('open', function() {
+  console.log('Connected to DB1');
+  // Use the db1 object to perform database operations
+});
+
+// Connect to DB2
+const db2 = mongoose.createConnection(dbURI2, { useNewUrlParser: true });
+db2.on('error', console.error.bind(console, 'DB2 connection error:'));
+db2.once('open', function() {
+  console.log('Connected to DB2');
+  // Use the db2 object to perform database operations
+});
+*/
+
 mongoose.connect(dbURI); 
 
 app.engine('handlebars', exphbs.engine({
@@ -32,7 +51,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
-
 
 // Passport initials
 app.use(passport.initialize());
@@ -56,7 +74,6 @@ authUser = async (user, password, done) =>  {
 
 passport.use(new LocalStrategy(authUser));
 
-
 passport.serializeUser( (userObj, done) => {
     done(null, userObj)
 })
@@ -76,10 +93,6 @@ checkLoggedIn = (req, res, next) => {
      }
     next()
 }
-
-
-
-
 
 // ROUTES
 
@@ -107,13 +120,12 @@ app.get('/user', checkAuthenticated, function (req, res) {
 // Showing user history page
 app.get('/history', checkAuthenticated, function (req, res) {
   res.render('history',
-  { username: req.user.username }
-  );
+  { username: req.user.username//,
+    /*history : data*/
+  });
 });
 
-
 //Handling user logout 
-
 app.get('/logout', function (req, res) {
   req.logout(function(err) {
       if (err) { 
@@ -176,12 +188,58 @@ app.post('/user', function(req, res) {
           chosenHours:chosenHours,
           departureTimeOut:departureTimeOut
         });
+
+    /*
+      // Create - tästä mallia siihen vaiheeseen, kun saadaan tietokanta ylös
+      app.post('/api/products', (req, res) => {
+        const newProduct = {
+          id: data.length + 1,
+          name: req.body.name,
+          description: req.body.description,
+          price: req.body.price,
+          isAvailable: req.body.isAvailable,
+          createdAt: req.body.createdAt,
+          features: req.body.features
+        };
+        data.push(newProduct);
+        res.json(newProduct); 
+      });
+    */
     })
     .catch(err => {
       console.log(err); 
       res.redirect("/results"); 
     });
 });
+
+/* Malliksi aiemmista harjoituksista historia sivua varten, jotta saadaan haettua, luettua, päivitettyä ja poistettua rivejä
+  // Update
+  app.patch('/api/products/:id', (req, res) => {
+    const i = data.findIndex((p) => p.id === parseInt(req.params.id));
+    if (i === -1) {
+      res.sendStatus(404);
+    } else {
+      const updatedProduct = {
+        ...data[i],
+        ...req.body,
+      };
+      data[i] = updatedProduct;
+      res.json(updatedProduct);
+    }
+  });
+  // Delete
+  app.delete('/api/products/:id', (req, res) => {
+    const i = parseInt(req.params.id);
+    //const i = data.findIndex((p) => p.id === parseInt(req.params.id));
+    if (i === -1) {
+      res.sendStatus(404);
+    } else {  
+      data = data.filter((p) => p.id !== i);
+      //data.splice(i, 1);
+      res.sendStatus(204);
+    }
+  });
+*/
 
 app.get('/results', (req, res) => {
   res.render('results',
