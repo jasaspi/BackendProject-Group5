@@ -6,11 +6,14 @@ require('dotenv').config();
  2. Jos pakkasta, niin laitetaan aina tunniksi sähköt päälle 
  3. Jos pakkasta yli kymmenen astetta, niin kaksi tuntia  */
 
-// const departureTime = require('./index.js'); TODO tämä pitää silputa location urliin
+ const departureTime = require('./index.js'); 
+ //2023-04-29T13:50:50.277Z
+ const date = departureTime.toISOString().slice(0, 10);
+ //console.log(date);
+ const hour = departureTime.getUTCHours();
+ //console.log(hour);
 
 const userLocation = 'Helsinki'; // TODO muuta nämä
-const date = '2023-05-01'; // TODO muuta nämä
-const hour = 12; // TODO muuta nämä
 const location = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(userLocation)}&dt=${date}&hour=${hour}`;
 
 const apiKey = process.env.X_RAPIDAPI_KEY;
@@ -25,8 +28,8 @@ const options = {
   }
 };
 
-const isFreezeng = 'On pakkasta'; // mitäs näihin
-const isMoreFreezing = 'On Pakkasta yli 10C'; // mitäs näihin
+const isFreezeng = 'On pakkasta, sähkö laitetaan päälle tuntia aijemmin.'; // mitäs näihin
+const isMoreFreezing = 'On Pakkasta yli 10C, sähkö laitetaan päälle kaksi tuntia aijemmin.'; // mitäs näihin
 
 
 const getTemperature = async (location, options) => {
@@ -41,10 +44,10 @@ const getTemperature = async (location, options) => {
     //return temperatureCelsius;
     console.log(temperatureCelsius);
     if (temperatureCelsius < 0 && temperatureCelsius >= -10) {
-      console.log(isFreezeng)
+      //console.log(isFreezeng)
       return isFreezeng;
     } else if (temperatureCelsius < -10) {
-      console.log(isMoreFreezing);
+      //console.log(isMoreFreezing);
       return isMoreFreezing;
     }
   } catch (error) {
