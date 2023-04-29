@@ -13,25 +13,15 @@ const User = require('./models/User');
 const UserInfo = require('./models/Userinfo');
 const app = express();
 const dbURI = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +''+ process.env.CLUSTER +'.mongodb.net/'+ process.env.DB +'?retryWrites=true&w=majority'
-//const dbURI2 = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +''+ process.env.CLUSTER +'.mongodb.net/'+ <databaseName> +'?retryWrites=true&w=majority' 
+const dbURI2 = 'mongodb+srv://' + process.env.DBUSER2 + ':' + process.env.DBPASSWD2 + '' + process.env.CLUSTER2 + '.mongodb.net/' + process.env.DB2 + '?retryWrites=true&w=majority'
 
-/* Tämä osa suoraan ChatGPT:stä, jotta saadaan molemmat tietokannat yhdistettyä
-// Connect to DB1
-const db1 = mongoose.createConnection(dbURI1, { useNewUrlParser: true });
-db1.on('error', console.error.bind(console, 'DB1 connection error:'));
-db1.once('open', function() {
-  console.log('Connected to DB1');
-  // Use the db1 object to perform database operations
-});
+mongoose.connect(dbURI)
+  .then(() => console.log('Connected to db1'))
+  .catch(err => console.log('Error connecting to db1:', err));
 
-// Connect to DB2
-const db2 = mongoose.createConnection(dbURI2, { useNewUrlParser: true });
-db2.on('error', console.error.bind(console, 'DB2 connection error:'));
-db2.once('open', function() {
-  console.log('Connected to DB2');
-  // Use the db2 object to perform database operations
-});
-*/
+const db2 = mongoose.createConnection(dbURI2, { useNewUrlParser: true, useUnifiedTopology: true });
+  db2.on('error', err => console.log('Error connecting to db2:', err));
+  db2.once('open', () => console.log('Connected to db2'));
 
 mongoose.connect(dbURI); 
 
@@ -142,7 +132,7 @@ app.get('/results', (req, res) => {
   {
       chosenHours: req.chosenHours, title: 'results', layout: 'main'
   });
-})
+});
 
 //Handling user logout 
 app.get('/logout', function (req, res) {
