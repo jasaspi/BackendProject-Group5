@@ -13,6 +13,7 @@ const flash = require('express-flash');
 require('dotenv').config();
 const User = require('./models/User');
 const UserInfo = require('./models/Userinfo');
+const Usage = require('./models/Usage');
 const app = express();
 const dbURI = 'mongodb+srv://'+ process.env.DBUSER +':'+ process.env.DBPASSWD +''+ process.env.CLUSTER +'.mongodb.net/'+ process.env.DB +'?retryWrites=true&w=majority'
 const dbURI2 = 'mongodb+srv://' + process.env.DBUSER2 + ':' + process.env.DBPASSWD2 + '' + process.env.CLUSTER2 + '.mongodb.net/' + process.env.DB2 + '?retryWrites=true&w=majority'
@@ -27,23 +28,12 @@ const usage_db = mongoose.createConnection(dbURI2, { useNewUrlParser: true, useU
 
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 
-
 const hbs = exphbs.create({
   defaultLayout: 'main',
   handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 
 app.engine('handlebars', hbs.engine);
-/*
-app.engine('handlebars', exphbs.engine({
-  defaultLayout: 'main',
-  allowedProtoMethods: {
-    departureTime: true,
-    estimatedMileage: true,
-    neededHours: true,
-    averagePrice: true
-  }
-}));*/
 
 app.set('view engine', 'handlebars');
 
@@ -125,7 +115,7 @@ app.get('/user', checkAuthenticated, function (req, res) {
 
 // Showing user history page
 app.get('/history', checkAuthenticated, async function (req, res) {
-  const usageInfo = await usage_db.model('Usage').find({ user: req.user.username });
+  const usageInfo = await Usage.find({ user: req.user.username });
   res.render('history',
   { 
     usageInfo: usageInfo, username: req.user.username, title: 'history', layout: 'main'
@@ -154,21 +144,11 @@ app.get('/logout', function (req, res) {
     });
 });
 
-
 let chosenHours = [];
 let departureTime = new Date();
 let departureTimeOut;
 let neededHours;
 let averagePrice;
-
-// Define the Usage schema
-const UsageSchema = new mongoose.Schema({
-  user: {    type: String,  },
-  departureTime: {    type: Date,  },
-  estimatedMileage: {    type: Number,  },
-  neededHours: {    type: Number,  },
-  averagePrice: {    type: Number,  }
-});
 
 app.post('/results', function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
@@ -206,18 +186,16 @@ app.post('/results', function(req, res) {
       averagePrice = sum / chosenHours.length;
       console.log('Average price:', averagePrice.toFixed(3));
 
-      const usageData = {
+      if (mongoose.models.Usage) {
+        delete mongoose.models.Usage;
+      }
+      const usage = new Usage({
         user: req.user?.username,
         departureTime: new Date(req.body.departuretime),
         estimatedMileage: estimatedMileage,
         neededHours: neededHours,
         averagePrice: averagePrice
-      };
-      if (mongoose.models.Usage) {
-        delete mongoose.models.Usage;
-      }
-      const Usage = usage_db.model('Usage', UsageSchema);
-      const usage = new Usage(usageData);
+      });
       usage.save()
         .then(() => {
           //console.log("Tiedot tallennettiin onnistuneesti");
