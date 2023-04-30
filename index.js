@@ -1,6 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const fetch = require('node-fetch');
+const Handlebars = require('handlebars');
+
 
 // Jonna added ones below to make mongo + user auth working
 const mongoose = require('mongoose');
@@ -23,9 +25,25 @@ const usage_db = mongoose.createConnection(dbURI2, { useNewUrlParser: true, useU
   usage_db.on('error', err => console.log('Error connecting to usage_db:', err));
   usage_db.once('open', () => console.log('Connected to usage_db'));
 
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+
+
+const hbs = exphbs.create({
+  defaultLayout: 'main',
+  handlebars: allowInsecurePrototypeAccess(Handlebars),
+});
+
+app.engine('handlebars', hbs.engine);
+/*
 app.engine('handlebars', exphbs.engine({
-  defaultLayout: 'main'
-}));
+  defaultLayout: 'main',
+  allowedProtoMethods: {
+    departureTime: true,
+    estimatedMileage: true,
+    neededHours: true,
+    averagePrice: true
+  }
+}));*/
 
 app.set('view engine', 'handlebars');
 
@@ -189,7 +207,7 @@ app.post('/results', function(req, res) {
       console.log('Average price:', averagePrice.toFixed(3));
 
       const usageData = {
-        user: req.user.username,
+        user: req.user?.username,
         departureTime: new Date(req.body.departuretime),
         estimatedMileage: estimatedMileage,
         neededHours: neededHours,

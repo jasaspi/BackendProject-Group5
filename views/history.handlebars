@@ -5,11 +5,26 @@
 {{/each}} --}}
 
 <p>Hei {{username}}</p>
-{{#each usageInfo}}
-  <p>Lähtöaika: {{this.departureTime.$date}}</p>
-  <p>Arvioitu matka kilometreissä: {{this.estimatedMileage.$numberInt}}</p>
-  <p>Lataustunnit: {{this.neededHours.$numberInt}}</p>
-  <p>Keskihinta: {{this.averagePrice.$numberDouble}}</p>
-{{/each}}
+<table>
+  <thead>
+    <tr>
+      <th>Lähtöaika</th>
+      <th>Arvioitu matka kilometreissä</th>
+      <th>Lataustunnit</th>
+      <th>Keskihinta</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each usageInfo}}
+      <tr>
+        <td>{{this.departureTime}}</td>
+        <td>{{this.estimatedMileage}}</td>
+        <td>{{this.neededHours}}</td>
+        <td>{{this.averagePrice}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
 
 <li><a href="/logout">Logout</a></li>
