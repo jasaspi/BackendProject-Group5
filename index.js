@@ -106,26 +106,15 @@ app.get('/user', checkAuthenticated, function (req, res) {
 });
 
 // Showing user history page
-app.get('/history', checkAuthenticated, function (req, res) {
+app.get('/history', checkAuthenticated, async function (req, res) {
+  const usageInfo = await usage_db.model('Usage').find({ user: req.user.username });
   res.render('history',
   { 
-    username: req.user.username, title: 'history', layout: 'main'
+    usageInfo: usageInfo, username: req.user.username, title: 'history', layout: 'main'
   });
 });
-/*
-  // Get by id
-  app.get('/api/products/:id', (req, res) => {
-    const product = data.find((p) => p.id === parseInt(req.params.id));
-    if (!product) {
-      res.sendStatus(404);
-    } else {
-      res.json(product);
-    }
-  });
-*/
 
 // Show results page
-
 app.get('/results', (req, res) => {
   res.render('results',
   {
@@ -156,18 +145,11 @@ let averagePrice;
 
 // Define the Usage schema
 const UsageSchema = new mongoose.Schema({
-  departureTime: {
-    type: Date,
-  },
-  estimatedMileage: {
-    type: Number,
-  },
-  neededHours: {
-    type: Number,
-  },
-  averagePrice: {
-    type: Number,
-  }
+  user: {    type: String,  },
+  departureTime: {    type: Date,  },
+  estimatedMileage: {    type: Number,  },
+  neededHours: {    type: Number,  },
+  averagePrice: {    type: Number,  }
 });
 
 app.post('/results', function(req, res) {
@@ -207,7 +189,8 @@ app.post('/results', function(req, res) {
       console.log('Average price:', averagePrice.toFixed(3));
 
       const usageData = {
-        departureTime: departureTime,
+        user: req.user.username,
+        departureTime: new Date(req.body.departuretime),
         estimatedMileage: estimatedMileage,
         neededHours: neededHours,
         averagePrice: averagePrice
@@ -219,18 +202,14 @@ app.post('/results', function(req, res) {
       const usage = new Usage(usageData);
       usage.save()
         .then(() => {
-          console.log("Tiedot tallennettiin onnistuneesti");
-          res.redirect("/results");
+          //console.log("Tiedot tallennettiin onnistuneesti");
+          res.redirect("/history");
         })
         .catch((err) => {
           console.log(err);
-          res.redirect("/results"); 
+          res.redirect("/history"); 
         });
     })
-    .catch(err => {
-      console.log(err); 
-      res.redirect("/results"); 
-    });
 });
 
 module.exports = departureTime;

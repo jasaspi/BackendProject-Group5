@@ -5,6 +5,11 @@
 {{/each}} --}}
 
 <p>Hei {{username}}</p>
-
+{{#each usageInfo}}
+  <p>Lähtöaika: {{this.departureTime.$date}}</p>
+  <p>Arvioitu matka kilometreissä: {{this.estimatedMileage.$numberInt}}</p>
+  <p>Lataustunnit: {{this.neededHours.$numberInt}}</p>
+  <p>Keskihinta: {{this.averagePrice.$numberDouble}}</p>
+{{/each}}
 
 <li><a href="/logout">Logout</a></li>
