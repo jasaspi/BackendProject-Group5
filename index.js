@@ -184,7 +184,8 @@ app.post('/results', function(req, res) {
       }
 
       averagePrice = sum / chosenHours.length;
-      console.log('Average price:', averagePrice.toFixed(3));
+      console.log(chosenHours);
+      //console.log('Average price:', averagePrice.toFixed(3));
 
       if (mongoose.models.Usage) {
         delete mongoose.models.Usage;
@@ -198,7 +199,7 @@ app.post('/results', function(req, res) {
       });
       usage.save()
         .then(() => {
-          //console.log("Tiedot tallennettiin onnistuneesti");
+          console.log("Tiedot tallennettiin onnistuneesti");
           res.redirect("/history");
         })
         .catch((err) => {
