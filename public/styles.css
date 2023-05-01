@@ -1,10 +1,16 @@
 
 /* Tämä demonstroi aktiivista linkkiä, muutetaan nätimmäksi myöhemmin */
 li.active {
-    background-color: blue;
+    background-color: #E7EBEE;
 }
 
 header .header-image {
-padding-left: 0px;
-padding-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
+.footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
