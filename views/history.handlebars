@@ -14,7 +14,8 @@
       <th>Arvioitu matka kilometreissä</th>
       <th>Lataustunnit</th>
       <th>Keskihinta</th>
-      <th>ID</th>
+      <th>Toimenpiteet</th>
+      <!-- <th>ID</th> -->
     </tr>
   </thead>
   <tbody>
@@ -25,11 +26,32 @@
         <td>{{this.estimatedMileage}}</td>
         <td>{{this.neededHours}}</td>
         <td>{{this.averagePrice}}</td>
-        <td>{{tihs.id}}</td>
+        <!-- <td>{{this.id}}</td> -->
+        <td>
+          <button onclick="updateUsage('{{this.id}}')">Päivitä</button>
+          <button onclick="deleteUsage('{{this.id}}')">Poista</button>
+        </td>
       </tr>
     {{/each}}
   </tbody>
 </table>
+
+<script>
+function deleteUsage(id) {
+  fetch(`/usage/${id}`, {
+    method: 'DELETE'
+  })
+  .then(response => {
+    if (response.ok) {
+      location.reload();
+    } else {
+      location.reload();
+      console.log('Poisto epäonnistui');
+    }
+  })
+  .catch(error => console.log(error));
+}
+</script>
 
 <h2>Menneet lähdöt ja niihin liittyvä tieto</h2>
 <table>

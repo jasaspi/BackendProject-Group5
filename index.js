@@ -149,6 +149,19 @@ app.get('/history', checkAuthenticated, async function (req, res) {
   });
 });
 
+//Delete
+app.delete('/usage/:id', checkAuthenticated, async (req, res) => {
+  const usageId = req.params.id;
+  try {
+    const deletedUsage = await usage_db.model('Usage').findByIdAndDelete(usageId);
+    res.redirect('/history');
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+
 // Show results page -- Tälle sivulle pääsee vain kirjautuneena
 app.get('/results', checkAuthenticated, (req, res) => {
   res.render('results',
@@ -190,7 +203,7 @@ const UsageSchema = new mongoose.Schema({
   averagePrice: {    type: Number,  }
 });
 
-app.post('/results', function(req, res) {
+app.post('/results', checkAuthenticated, function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
 
   fetch(apiUrl)
