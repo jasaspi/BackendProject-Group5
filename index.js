@@ -34,16 +34,6 @@ const hbs = exphbs.create({
 });
 
 app.engine('handlebars', hbs.engine);
-/*
-app.engine('handlebars', exphbs.engine({
-  defaultLayout: 'main',
-  allowedProtoMethods: {
-    departureTime: true,
-    estimatedMileage: true,
-    neededHours: true,
-    averagePrice: true
-  }
-}));*/
 
 app.set('view engine', 'handlebars');
 
@@ -125,7 +115,7 @@ app.get('/user', checkAuthenticated, function (req, res) {
 
 // Showing user history page
 app.get('/history', checkAuthenticated, async function (req, res) {
-  const usageInfo = await usage_db.model('Usage').find({ user: req.user.username });
+  const usageInfo = await usage_db.model('Usage', UsageSchema).find({ user: req.user.username });
   res.render('history',
   { 
     usageInfo: usageInfo, username: req.user.username, title: 'history', layout: 'main'
@@ -153,7 +143,6 @@ app.get('/logout', function (req, res) {
       
     });
 });
-
 
 let chosenHours = [];
 let departureTime = new Date();
@@ -205,7 +194,7 @@ app.post('/results', function(req, res) {
 
       temp = sum / chosenHours.length;
       averagePrice = temp.toFixed(3);
-      console.log('Average price:', averagePrice.toFixed(3));
+      console.log('Average price:', temp.toFixed(3));
 
       const usageData = {
         user: req.user?.username,
@@ -232,7 +221,6 @@ app.post('/results', function(req, res) {
 });
 
 module.exports = departureTime;
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`App listening to port ${PORT}`));
