@@ -4,6 +4,7 @@ li.active {
     background-color: blue;
 }
 
-header {
-    object-fit: cover;
+header .header-image {
+padding-left: 0px;
+padding-right: 0px;
 }
