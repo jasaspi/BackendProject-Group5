@@ -34,6 +34,16 @@ const hbs = exphbs.create({
 });
 
 app.engine('handlebars', hbs.engine);
+/*
+app.engine('handlebars', exphbs.engine({
+  defaultLayout: 'main',
+  allowedProtoMethods: {
+    departureTime: true,
+    estimatedMileage: true,
+    neededHours: true,
+    averagePrice: true
+  }
+}));*/
 
 app.set('view engine', 'handlebars');
 
@@ -193,7 +203,8 @@ app.post('/results', function(req, res) {
         sum += chosenHours[i].price;
       }
 
-      averagePrice = sum / chosenHours.length;
+      temp = sum / chosenHours.length;
+      averagePrice = temp.toFixed(3);
       console.log('Average price:', averagePrice.toFixed(3));
 
       const usageData = {
