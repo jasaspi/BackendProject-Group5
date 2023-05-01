@@ -208,6 +208,8 @@ app.post('/results', function(req, res) {
       temp = sum / chosenHours.length;
       averagePrice = temp.toFixed(3);
       console.log('Average price:', temp.toFixed(3));
+      
+      
 
       const usageData = {
         user: req.user?.username,
