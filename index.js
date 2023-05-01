@@ -106,24 +106,37 @@ app.post ('/login', passport.authenticate('local', {
   failureFlash: true
 }));
 
-// Showing user page
+// Showing user page -- Tälle sivulle pääsee vain kirjautuneena
 app.get('/user', checkAuthenticated, function (req, res) {
   res.render('user',
   { user: req.user, title: 'User', layout: 'main' }
   );
 });
 
-// Showing user history page
+// Showing user history page -- Tälle sivulle pääsee vain kirjautuneena
 app.get('/history', checkAuthenticated, async function (req, res) {
   const usageInfo = await usage_db.model('Usage', UsageSchema).find({ user: req.user.username });
+  let timeNow = new Date();
+  let usageFuture = [];
+  let usagePast = [];
+
+  usageInfo.forEach(info => {
+    if(info.departureTime > timeNow) {
+      usageFuture.push(info);
+    }
+    else if(info.departureTime < timeNow) {
+      usagePast.push(info);
+    }
+  });
+
   res.render('history',
   { 
-    usageInfo: usageInfo, username: req.user.username, title: 'history', layout: 'main'
+    usageInfo: usageInfo, usageFuture: usageFuture, usagePast: usagePast, timeNow: timeNow, username: req.user.username, title: 'history', layout: 'main'
   });
 });
 
-// Show results page
-app.get('/results', (req, res) => {
+// Show results page -- Tälle sivulle pääsee vain kirjautuneena
+app.get('/results', checkAuthenticated, (req, res) => {
   res.render('results',
   {
       chosenHours: req.chosenHours, title: 'results', layout: 'main'
