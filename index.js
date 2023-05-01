@@ -90,6 +90,12 @@ checkLoggedIn = (req, res, next) => {
     next()
 }
 
+// Tätä käytetään navbarin näkyvyyteen kirjautuneena/ei kirjautuneena
+app.use(function (req, res, next) {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  next();
+});
+
 // ROUTES
 
 // Routes and added by Jonna
@@ -131,7 +137,15 @@ app.get('/history', checkAuthenticated, async function (req, res) {
 
   res.render('history',
   { 
-    usageInfo: usageInfo, usageFuture: usageFuture, usagePast: usagePast, timeNow: timeNow, username: req.user.username, title: 'history', layout: 'main'
+    usageInfo: usageInfo, 
+    usageFuture: usageFuture, 
+    usagePast: usagePast, 
+    timeNow: timeNow, 
+    username: req.user.username, 
+    title: 'history', 
+    layout: 'main',
+    active: {history: true },
+    page_name: 'history'
   });
 });
 
@@ -139,7 +153,11 @@ app.get('/history', checkAuthenticated, async function (req, res) {
 app.get('/results', checkAuthenticated, (req, res) => {
   res.render('results',
   {
-      chosenHours: req.chosenHours, title: 'results', layout: 'main'
+      chosenHours: req.chosenHours, 
+      title: 'results', 
+      layout: 'main',
+      active: {results: true },
+      page_name: 'results'
   });
 });
 

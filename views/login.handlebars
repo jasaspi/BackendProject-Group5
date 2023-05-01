@@ -1,15 +1,18 @@
+
 <h2>Kirjaudu</h2>
 
-  <div>
+{{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
+  <div class="errors" role="alert" aria-relevant="all">
     {{#if messages.error}}
   <p>{{messages.error}}</p>
   {{/if}}
   </div>
 
+{{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
     <form action="/login" method="POST">
       <label for="username">User name:</label><br />
-      <input type="text" id="username" name="username" /><br />
+      <input type="text" id="username" name="username" aria-required="true" placeholder="Username" /><br />
       <label for="password">Password:</label><br />
-      <input type="text" id="password" name="password" /><br /><br />
-      <button>Login</button>
+      <input type="text" id="password" name="password" aria-required="true" placeholder="Password"/><br /><br />
+      <button type="submit">Login</button>
     </form>

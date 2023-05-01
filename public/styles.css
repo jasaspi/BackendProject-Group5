@@ -1,0 +1,5 @@
+
+/* Tämä demonstroi aktiivista linkkiä, muutetaan nätimmäksi myöhemmin */
+li.active {
+    background-color: blue;
+}

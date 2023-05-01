@@ -1,10 +1,12 @@
+
+{{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
 <form action="/results" method="POST">
   <label for="departuretime">Lähtöaika:</label><br />
-  <input type="datetime-local" id="departuretime" name="departuretime" /><br /><br />
+  <input type="datetime-local" id="departuretime" name="departuretime" aria-required="true" /><br /><br />
   <label for="estimatedmileage">Arvioitu matka (km):</label><br />
-  <input type="text" id="estimatedmileage" name="estimatedmileage" /><br /><br />
+  <input type="text" id="estimatedmileage" name="estimatedmileage" aria-required="true" placeholder="kilometrit" /><br /><br />
   <label for="location">Paikkakunta:</label><br />
-  <input type="text" name="location" id="location" ><br /><br />
+  <input type="text" name="location" id="location" aria-required="true" placeholder="Anna paikkakunta" ><br /><br />
   <button type="submit">Hae tarvittavat lataustunnit</button>
 </form>
 
@@ -28,4 +30,3 @@
 
 <h1>{{location}} {{temperature}} </h1>
 
-<li><a href="/logout">Logout</a></li>
