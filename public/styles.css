@@ -3,3 +3,7 @@
 li.active {
     background-color: blue;
 }
+
+header {
+    object-fit: cover;
+}
