@@ -43,7 +43,7 @@ app.use(express.static('public'));
 app.use(flash());
 
 app.use(session({
-    secret: "This is a secret",
+    secret : process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
