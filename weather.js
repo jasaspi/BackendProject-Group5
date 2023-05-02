@@ -34,15 +34,15 @@ const getTemperature = async (location, options) => {
     const locationUrl = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(location)}`;
     const response = await fetch(locationUrl, options);
     if (!response.ok) {
-      throw new Error('Failed to fetch weather data');
+      throw new Error('User input wasn´t yet received');
     }
     const result = await response.json();
-    const temperatureCelsius = result.current.temp_c + " °C";
-   // const temperatureCelsius = -9;
+    const tempToInt = Math.round(result.current.temp_c); // toinen muuttuja pelkkää numeroiden vertailua varten
+    const temperatureCelsius = tempToInt.toFixed(0) + " °C";
     console.log(temperatureCelsius);
-    if (temperatureCelsius < 0 && temperatureCelsius >= -10) {
+    if (tempToInt < 0 && tempToInt >= -10) {
       return 'Pakkasta on '+ temperatureCelsius +' sähköt laitetaan päälle tuntia aijemmin.';
-    } else if (temperatureCelsius < -10) {
+    } else if (tempToInt < -10) {
       return 'Pakkasta on '+ temperatureCelsius + ' sähköt laitetaan päälle kaksi tuntia aijemmin.';
     } else {
       return temperatureCelsius;
