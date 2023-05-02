@@ -7,6 +7,7 @@
       <th>Arvioitu matka kilometreissä</th>
       <th>Lataustunnit</th>
       <th>Keskihinta</th>
+      <th>Sää</th>
       <th>Toimenpiteet</th>
       <!-- <th>ID</th> -->
     </tr>
@@ -19,6 +20,7 @@
         <td>{{this.estimatedMileage}}</td>
         <td>{{this.neededHours}}</td>
         <td>{{this.averagePrice}}</td>
+        <td>{{this.temperature}}</td>
         <td>
           <button onclick="updateUsage('{{this.id}}')">Päivitä</button>
           <button onclick="deleteUsage('{{this.id}}')">Poista</button>
@@ -99,6 +101,7 @@ function updateUsage(id) {
         <td>{{this.estimatedMileage}}</td>
         <td>{{this.neededHours}}</td>
         <td>{{this.averagePrice}}</td>
+        <td>{{this.temperature}}</td>
       </tr>
     {{/each}}
   </tbody>

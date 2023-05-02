@@ -6,15 +6,14 @@ require('dotenv').config();
  2. Jos pakkasta, niin laitetaan aina tunniksi sähköt päälle 
  3. Jos pakkasta yli kymmenen astetta, niin kaksi tuntia  */
 
- const departureTime = require('./index.js'); 
- //2023-04-29T13:50:50.277Z
- const date = departureTime.toISOString().slice(0, 10);
- //console.log(date);
- const hour = departureTime.getUTCHours();
- //console.log(hour);
+ let departureTime = require('./index.js'); 
+ const location = require('./index.js'); 
 
-const userLocation = 'Helsinki'; // TODO muuta nämä
-const location = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(userLocation)}&dt=${date}&hour=${hour}`;
+  const date = '2023-05-01'; // TODO muuta nämä
+  const hour = 12; // TODO muuta nämä
+
+//const userLocation = 'Helsinki'; // TODO muuta nämä
+//const location = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(userLocation)}&dt=${date}&hour=${hour}`;
 
 const apiKey = process.env.X_RAPIDAPI_KEY;
 const apiHost = process.env.X_RAPIDAPI_HOST;
@@ -28,31 +27,37 @@ const options = {
   }
 };
 
-const isFreezeng = 'On pakkasta, sähkö laitetaan päälle tuntia aijemmin.'; // mitäs näihin
-const isMoreFreezing = 'On Pakkasta yli 10C, sähkö laitetaan päälle kaksi tuntia aijemmin.'; // mitäs näihin
 
 
 const getTemperature = async (location, options) => {
   try {
-    const response = await fetch(location, options);
+    const locationUrl = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(location)}`;
+    const response = await fetch(locationUrl, options);
     if (!response.ok) {
       throw new Error('Failed to fetch weather data');
     }
     const result = await response.json();
-    const temperatureCelsius = result.current.temp_c; //seulotaan pelkkä lämpötila
-    //const temperatureCelsius = -10;
-    //return temperatureCelsius;
+    const temperatureCelsius = result.current.temp_c + " °C";
+   // const temperatureCelsius = -9;
     console.log(temperatureCelsius);
     if (temperatureCelsius < 0 && temperatureCelsius >= -10) {
-      //console.log(isFreezeng)
-      return isFreezeng;
+      return 'Pakkasta on '+ temperatureCelsius +' sähköt laitetaan päälle tuntia aijemmin.';
     } else if (temperatureCelsius < -10) {
-      //console.log(isMoreFreezing);
-      return isMoreFreezing;
+      return 'Pakkasta on '+ temperatureCelsius + ' sähköt laitetaan päälle kaksi tuntia aijemmin.';
+    } else {
+      return temperatureCelsius;
     }
   } catch (error) {
     console.error(error);
-  }
-}
+  }}
+
+
+console.log(typeof departureTime);
 
 getTemperature(location, options);
+
+
+module.exports = {
+  getTemperature: getTemperature,
+  options: options
+};

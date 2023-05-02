@@ -3,6 +3,10 @@ const exphbs = require('express-handlebars');
 const fetch = require('node-fetch');
 const Handlebars = require('handlebars');
 
+const weather = require('./weather.js');
+const getTemperature = weather.getTemperature;
+const options = weather.options;
+
 
 // Jonna added ones below to make mongo + user auth working
 const mongoose = require('mongoose');
@@ -214,17 +218,27 @@ const UsageSchema = new mongoose.Schema({
   departureTime: {    type: Date,  },
   estimatedMileage: {    type: Number,  },
   neededHours: {    type: Number,  },
-  averagePrice: {    type: Number,  }
+  averagePrice: {    type: Number,  },
+  temperature: { type: String }
 });
 
-app.post('/results', checkAuthenticated, function(req, res) {
+app.post('/results', checkAuthenticated, async function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
+
+  const location = req.body.location;
+  const temperature = await getTemperature(location, options);
+  console.log(temperature);
+  console.log(req.body);
+  //const temperature = '10';
+
+  console.log(req.body)
 
   fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
 
       departureTime = new Date(req.body.departuretime).getTime();
+      console.log(req.body.departuretime)
       data.prices.sort((a, b) => a.endDate - b.endDate);// check last known time for price - data.prices[0]
       const twelveHoursPrior = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
       const filteredHours = data.prices.filter(item => item.startDate >= twelveHoursPrior);
@@ -261,7 +275,9 @@ app.post('/results', checkAuthenticated, function(req, res) {
         departureTime: new Date(req.body.departuretime),
         estimatedMileage: estimatedMileage,
         neededHours: neededHours,
-        averagePrice: averagePrice
+        averagePrice: averagePrice,
+        temperature: temperature 
+        
       };
       if (mongoose.models.Usage) {
         delete mongoose.models.Usage;
@@ -280,7 +296,7 @@ app.post('/results', checkAuthenticated, function(req, res) {
     })
 });
 
-module.exports = departureTime;
+module.exports.departureTime = departureTime;
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`App listening to port ${PORT}`));
