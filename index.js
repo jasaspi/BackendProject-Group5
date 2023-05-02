@@ -227,18 +227,13 @@ app.post('/results', checkAuthenticated, async function(req, res) {
 
   const location = req.body.location;
   const temperature = await getTemperature(location, options);
-  console.log(temperature);
   console.log(req.body);
-  //const temperature = '10';
-
-  console.log(req.body)
 
   fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
 
       departureTime = new Date(req.body.departuretime).getTime();
-      console.log(req.body.departuretime)
       data.prices.sort((a, b) => a.endDate - b.endDate);// check last known time for price - data.prices[0]
       const twelveHoursPrior = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
       const filteredHours = data.prices.filter(item => item.startDate >= twelveHoursPrior);
