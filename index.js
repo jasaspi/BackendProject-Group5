@@ -161,6 +161,20 @@ app.delete('/usage/:id', checkAuthenticated, async (req, res) => {
   }
 });
 
+app.patch('/usage/:id', checkAuthenticated, async (req, res) => {
+  const usageId = req.params.id;
+  const updatedUsage = req.body;
+
+  try {
+    const result = await usage_db.model('Usage').findByIdAndUpdate(usageId, updatedUsage);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+
 
 // Show results page -- Tälle sivulle pääsee vain kirjautuneena
 app.get('/results', checkAuthenticated, (req, res) => {

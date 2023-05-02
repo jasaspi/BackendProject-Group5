@@ -1,12 +1,5 @@
-
-<h1>Täältä löytyy käyttäjän historia</h1>
-
-{{!-- {{#each products}}
-  <p>{{this.name}}</p>
-{{/each}} --}}
-
-<p>Hei {{username}}</p>
-<h2>Tulevat lähdöt ja niihin liittyvä tieto</h2>
+<h1>Hei - {{username}}. Alla eriteltynä menneet ja tulevat lähtöhetket</h1><br>
+<h2>Tulevat lähdöt ja niihin liittyvä tieto:</h2>
 <table>
   <thead>
     <tr>
@@ -26,15 +19,16 @@
         <td>{{this.estimatedMileage}}</td>
         <td>{{this.neededHours}}</td>
         <td>{{this.averagePrice}}</td>
-        <!-- <td>{{this.id}}</td> -->
         <td>
           <button onclick="updateUsage('{{this.id}}')">Päivitä</button>
           <button onclick="deleteUsage('{{this.id}}')">Poista</button>
         </td>
+        <tr hidden data-id="{{this.id}}"></tr>
       </tr>
     {{/each}}
   </tbody>
 </table>
+
 
 <script>
 function deleteUsage(id) {
@@ -51,9 +45,43 @@ function deleteUsage(id) {
   })
   .catch(error => console.log(error));
 }
+
+function updateUsage(id) {
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+
+  const updatedDepartureTime = prompt('Syötä uusi lähtöaika:');
+  const updatedEstimatedMileage = prompt('Syötä uusi arvio matkan pituudesta:');
+
+  fetch(`/usage/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      departureTime: updatedDepartureTime,
+      estimatedMileage: updatedEstimatedMileage
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      // Update the row with the new values
+      row.querySelector('td:nth-child(1)').textContent = updatedDepartureTime;
+      row.querySelector('td:nth-child(2)').textContent = updatedEstimatedMileage;
+      row.querySelector('td:nth-child(3)').textContent = updatedNeededHours;
+      row.querySelector('td:nth-child(4)').textContent = updatedAveragePrice;
+      location.reload();
+    } else {
+      console.log('Päivitys epäonnistui');
+      location.reload();
+    }
+  })
+  .catch(error => console.log(error));
+}
+
 </script>
 
-<h2>Menneet lähdöt ja niihin liittyvä tieto</h2>
+<br>
+<h2>Menneet lähdöt ja niihin liittyvä tieto:</h2>
 <table>
   <thead>
     <tr>
