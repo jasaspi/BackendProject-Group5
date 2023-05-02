@@ -9,8 +9,8 @@ require('dotenv').config();
  let departureTime = require('./index.js'); 
  const location = require('./index.js'); 
 
-  const date = '2023-05-01'; // TODO muuta nämä
-  const hour = 12; // TODO muuta nämä
+  // const date = '2023-05-01'; // TODO muuta nämä
+  // const hour = 12; // TODO muuta nämä
 
 //const userLocation = 'Helsinki'; // TODO muuta nämä
 //const location = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(userLocation)}&dt=${date}&hour=${hour}`;
@@ -28,12 +28,12 @@ const options = {
 };
 
 
-
 const getTemperature = async (location, options) => {
   try {
     const locationUrl = `https://weatherapi-com.p.rapidapi.com/current.json?q=${encodeURIComponent(location)}`;
     const response = await fetch(locationUrl, options);
     if (!response.ok) {
+      console.error(`HTTP error: ${response.status} ${response.statusText}`);
       throw new Error('User input wasn´t yet received');
     }
     const result = await response.json();
@@ -51,10 +51,6 @@ const getTemperature = async (location, options) => {
     console.error(error);
   }}
 
-
-console.log(typeof departureTime);
-
-getTemperature(location, options);
 
 
 module.exports = {

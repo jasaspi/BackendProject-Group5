@@ -222,12 +222,13 @@ const UsageSchema = new mongoose.Schema({
   temperature: { type: String }
 });
 
-app.post('/results', checkAuthenticated, async function(req, res) {
+app.post('/results', checkAuthenticated, function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
 
   const location = req.body.location;
-  const temperature = await getTemperature(location, options);
-  console.log(req.body);
+  getTemperature(location, options)
+    .then((temperature) => {
+      console.log(req.body);
 
   fetch(apiUrl)
     .then(response => response.json())
@@ -288,8 +289,8 @@ app.post('/results', checkAuthenticated, async function(req, res) {
           console.log(err);
           res.redirect("/history"); 
         });
-    })
-});
+            })
+})});
 
 module.exports.departureTime = departureTime;
 
