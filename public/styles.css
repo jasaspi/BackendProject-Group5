@@ -1,21 +1,31 @@
-/* Tämä demonstroi aktiivista linkkiä, muutetaan nätimmäksi myöhemmin */
-li.active {
-    background-color: #CDD0CB;
-}
+/* Alla header + navbar tyylit */
 
 header .header-image {
     padding-left: 0px;
     padding-right: 0px;
 }
 
-
-.content {
-    padding-top: 30px;
-    padding-bottom: 20px;
-
-    
+.navbar {
+    background-color: #E8EAE6 !important;
 }
 
+a.nav-link {
+    color: black;
+}
+
+li.active {
+    background-color: #CDD0CB;
+    border-radius: 5px;
+}
+
+
+/*Bodyn tyylit*/
+.content {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+/*Alla footer tyylit*/
 .footer {
     padding-top: 40px;
     padding-bottom: 40px;
