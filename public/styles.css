@@ -55,8 +55,7 @@ h3 {
     width: 90%;
     border-collapse: collapse;
     border-spacing: 0;
-    margin: 1em;
-    margin-bottom: 3em;
+    margin-bottom: 5em;
     
   }
   
@@ -76,16 +75,17 @@ h3 {
   [role="table"] [role="tbody"] td {
     height: 2em; 
     vertical-align: middle;
+    
   }
 
-/*   @media screen and (max-width: 600px) {  //mobiiliin
+   @media screen and (max-width: 600px) {  
     [role="table"] [role="cell"], 
     [role="table"] [role="columnheader"] {
       width: 5em;
       font-size: 0.8em;
     }
 
-    .future-usage-info {            // side scroller mobiiliin
+    .future-usage-info {           
       overflow-x: auto;
     }
   
@@ -94,7 +94,11 @@ h3 {
     }
     
   }
- */
+
+  h1 {
+    padding-bottom: 1em;
+  }
+ 
   
   
 
