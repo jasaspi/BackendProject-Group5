@@ -106,7 +106,8 @@ app.use(function (req, res, next) {
 
 //Showing login form
 app.get("/login", checkLoggedIn, function (req, res) {
-  res.render("login", { title: 'Login', layout: 'main' });
+  res.render("login", { title: 'Login', layout: 'main', active: {login: true },
+  page_name: 'login' });
 });
 
 // Handling user login

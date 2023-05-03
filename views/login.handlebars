@@ -1,5 +1,7 @@
 
-<h2>Kirjaudu</h2>
+    <h2>Kirjaudu</h2>
+
+
 
 {{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
   <div class="errors" role="alert" aria-relevant="all">
@@ -10,9 +12,13 @@
 
 {{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
     <form action="/login" method="POST">
+      <div class="mb-3">
       <label for="username">User name:</label><br />
       <input type="text" id="username" name="username" aria-required="true" placeholder="Username" /><br />
+      </div>
+      <div class="mb-3">
       <label for="password">Password:</label><br />
       <input type="text" id="password" name="password" aria-required="true" placeholder="Password"/><br /><br />
+      </div>
       <button type="submit">Login</button>
     </form>
