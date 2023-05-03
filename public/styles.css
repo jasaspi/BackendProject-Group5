@@ -51,12 +51,9 @@ h3 {
 
 
 [role="table"] {  /* jos rooli attribuutti on table */
-    display: table;
-    width: 90%;
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 5em;
-    
   }
   
   [role="table"] [role="cell"], 

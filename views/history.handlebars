@@ -61,8 +61,8 @@
       <td role="cell">{{this.neededHours}}</td>
       <td role="cell">{{this.averagePrice}}</td>
       <td role="cell">{{this.temperature}}</td>
-      <td role="cell"><button onclick="updateUsage('{{this.id}}')"aria-label="Update usage">Päivitä</button>
-        <button onclick="deleteUsage('{{this.id}}')"aria-label="Delete usage">Poista</button>
+      <td role="cell"><button onclick="updateUsage('{{this.id}}')"aria-label="Päivitä rivitietoja">Päivitä</button>
+        <button onclick="deleteUsage('{{this.id}}')"aria-label="Poista rivi">Poista</button>
       </td>
     </tr>
     <tr role="row" hidden data-id="{{this.id}}"></tr>
@@ -160,8 +160,7 @@
       <th role="columnheader">Arvioitu matka kilometreissä</th>
       <th role="columnheader">Lataustunnit</th>
       <th role="columnheader">Keskihinta</th>
-      <th role="columnheader">Lämpötila</th>
-      <th></th>
+      <th role="columnheader">Lämpötila</th>  
     </tr>
   </thead>
 
@@ -173,11 +172,8 @@
       <td role="cell">{{this.neededHours}}</td>
       <td role="cell">{{this.averagePrice}}</td>
       <td role="cell">{{this.temperature}}</td>
-      <td role="cell">
-      </td>
-    
     </tr>
-    <tr role="row"></tr>
+  
     {{/each}}
   </tbody>
 </table>
