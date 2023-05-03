@@ -8,7 +8,6 @@ header .header-image {
     padding-right: 0px;
 }
 
-
 .footer {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -19,10 +18,12 @@ header .header-image {
 
 [role="table"] {  /* jos rooli attribuutti on table */
     display: table;
-    width: 100%;
+    width: 90%;
     border-collapse: collapse;
     border-spacing: 0;
-    margin-bottom: 1em;
+    margin: 1em;
+    margin-bottom: 3em;
+    
   }
   
   [role="table"] [role="cell"], 
@@ -34,8 +35,33 @@ header .header-image {
   
   [role="table"] [role="columnheader"] {
     font-weight: bold;
-    border-bottom: thin solid #00b661;
+    background-color: #5bd357;
   }
 
+
+  [role="table"] [role="tbody"] td {
+    height: 2em; 
+    vertical-align: middle;
+  }
+
+/*   @media screen and (max-width: 600px) {  //mobiiliin
+    [role="table"] [role="cell"], 
+    [role="table"] [role="columnheader"] {
+      width: 5em;
+      font-size: 0.8em;
+    }
+
+    .future-usage-info {            // side scroller mobiiliin
+      overflow-x: auto;
+    }
+  
+    .past_usage_info {
+      overflow-x: auto;
+    }
+    
+  }
+ */
+  
+  
 
 /* Taulukkorivit loppuvat */
