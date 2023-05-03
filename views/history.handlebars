@@ -36,9 +36,9 @@
 
 <h1>Hei - {{username}}. Alla eriteltynä menneet ja tulevat lähtöhetket</h1><br>
 <div id="future_usage_info">
-  <caption><h2>Tulevat lähdöt ja niihin liittyvä tieto:</h2></caption>
-</div>
-<table role="table">
+  <h2>Tulevat lähdöt ja niihin liittyvä tieto:</h2>
+
+<table role="table" aria-label="Tulevat lähdöt ja niihin liittyvä tieto:">
   <thead>
     <tr role="row">
       <th role="columnheader">Lähtöaika</th>
@@ -57,14 +57,15 @@
       <td role="cell">{{this.neededHours}}</td>
       <td role="cell">{{this.averagePrice}}</td>
       <td role="cell">{{this.temperature}}</td>
-      <td role="cell"><button onclick="updateUsage('{{this.id}}')">Päivitä</button>
-        <button onclick="deleteUsage('{{this.id}}')">Poista</button>
+      <td role="cell"><button onclick="updateUsage('{{this.id}}')"aria-label="Update usage">Päivitä</button>
+        <button onclick="deleteUsage('{{this.id}}')"aria-label="Delete usage">Poista</button>
       </td>
     </tr>
     <tr role="row" hidden data-id="{{this.id}}"></tr>
     {{/each}}
   </tbody>
 </table>
+</div>
 
 
 
@@ -146,9 +147,9 @@
 
 
 <div id="past_usage_info">
-  <caption><h2>Menneet lähdöt ja niihin liittyvä tieto:</h2></caption>
-</div>
-<table role="table">
+ <h2>Menneet lähdöt ja niihin liittyvä tieto:</h2>
+
+<table role="table" aria-label="Menneet lähdöt ja niihin liittyvä tieto:">
   <thead>
     <tr role="row">
       <th role="columnheader">Lähtöaika</th>
@@ -176,3 +177,4 @@
     {{/each}}
   </tbody>
 </table>
+</div>
