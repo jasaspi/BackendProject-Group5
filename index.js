@@ -225,8 +225,8 @@ const UsageSchema = new mongoose.Schema({
 
 app.post('/results', checkAuthenticated, function(req, res) {
   const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
-
-  const location = req.body.location;
+  
+  const location = req.body.location.replace(/[^a-zA-Z\s]/g, '');
   getTemperature(location, options)
     .then((temperature) => {
       console.log(req.body);
