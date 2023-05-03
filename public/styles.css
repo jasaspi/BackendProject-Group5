@@ -18,11 +18,16 @@ li.active {
     border-radius: 5px;
 }
 
+.navbar-brand {
+    padding-right: 45px;
+}
+
 
 /*Bodyn tyylit*/
 .content {
     padding-top: 40px;
     padding-bottom: 40px;
+    
 }
 
 /*Alla footer tyylit*/
