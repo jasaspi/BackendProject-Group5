@@ -1,5 +1,7 @@
-<h1>Hei - {{username}}. Alla eriteltynä menneet ja tulevat lähtöhetket</h1><br>
-<h2>Tulevat lähdöt ja niihin liittyvä tieto:</h2>
+{{!-- <h1>Hei - {{username}}. Alla eriteltynä menneet ja tulevat lähtöhetket</h1><br>
+<div id="future_usage_info">
+  <h2>Tulevat lähdöt ja niihin liittyvä tieto:</h2>
+</div>
 <table>
   <thead>
     <tr>
@@ -7,82 +9,116 @@
       <th>Arvioitu matka kilometreissä</th>
       <th>Lataustunnit</th>
       <th>Keskihinta</th>
-      <th>Sää</th>
+      <th>Lämpötila</th>
       <th>Toimenpiteet</th>
       <!-- <th>ID</th> -->
     </tr>
   </thead>
   <tbody>
     {{!-- {{#each usageInfo}} --}}
+{{!--     {{#each usageFuture}}
+    <tr>
+      <td>{{this.departureTime}}</td>
+      <td>{{this.estimatedMileage}}</td>
+      <td>{{this.neededHours}}</td>
+      <td>{{this.averagePrice}}</td>
+      <td>{{this.temperature}}</td>
+      <td>
+        <button onclick="//updateUsage('{{this.id}}')">Päivitä</button>
+        <button onclick="//deleteUsage('{{this.id}}')">Poista</button>
+      </td>
+    <tr hidden data-id="{{this.id}}"></tr>
+    </tr>
+    {{/each}}
+  </tbody>
+</table> --}}
+ 
+
+<h1>Hei - {{username}}. Alla eriteltynä menneet ja tulevat lähtöhetket</h1><br>
+<div id="future_usage_info">
+  <caption><h2>Tulevat lähdöt ja niihin liittyvä tieto:</h2></caption>
+</div>
+<table role="table">
+  <thead>
+    <tr role="row">
+      <th role="columnheader">Lähtöaika</th>
+      <th role="columnheader">Arvioitu matka kilometreissä</th>
+      <th role="columnheader">Lataustunnit</th>
+      <th role="columnheader">Keskihinta</th>
+      <th role="columnheader">Lämpötila</th>
+      <th role="columnheader">Toimenpiteet</th>
+    </tr>
+  </thead>
+  <tbody>
     {{#each usageFuture}}
-      <tr>
-        <td>{{this.departureTime}}</td>
-        <td>{{this.estimatedMileage}}</td>
-        <td>{{this.neededHours}}</td>
-        <td>{{this.averagePrice}}</td>
-        <td>{{this.temperature}}</td>
-        <td>
-          <button onclick="updateUsage('{{this.id}}')">Päivitä</button>
-          <button onclick="deleteUsage('{{this.id}}')">Poista</button>
-        </td>
-        <tr hidden data-id="{{this.id}}"></tr>
-      </tr>
+    <tr role="row">
+      <td role="cell">{{this.departureTime}}</td>
+      <td role="cell">{{this.estimatedMileage}}</td>
+      <td role="cell">{{this.neededHours}}</td>
+      <td role="cell">{{this.averagePrice}}</td>
+      <td role="cell">{{this.temperature}}</td>
+      <td role="cell"><button onclick="updateUsage('{{this.id}}')">Päivitä</button>
+        <button onclick="deleteUsage('{{this.id}}')">Poista</button>
+      </td>
+    </tr>
+    <tr role="row" hidden data-id="{{this.id}}"></tr>
     {{/each}}
   </tbody>
 </table>
 
 
+
 <script>
-function deleteUsage(id) {
-  fetch(`/usage/${id}`, {
-    method: 'DELETE'
-  })
-  .then(response => {
-    if (response.ok) {
-      location.reload();
-    } else {
-      location.reload();
-      console.log('Poisto epäonnistui');
-    }
-  })
-  .catch(error => console.log(error));
-}
+  function deleteUsage(id) {
+    fetch(`/usage/${id}`, {
+      method: 'DELETE'
+    })
+      .then(response => {
+        if (response.ok) {
+          location.reload();
+        } else {
+          location.reload();
+          console.log('Poisto epäonnistui');
+        }
+      })
+      .catch(error => console.log(error));
+  }
 
-function updateUsage(id) {
-  const row = document.querySelector(`tr[data-id="${id}"]`);
+  function updateUsage(id) {
+    const row = document.querySelector(`tr[data-id="${id}"]`);
 
-  const updatedDepartureTime = prompt('Syötä uusi lähtöaika:');
-  const updatedEstimatedMileage = prompt('Syötä uusi arvio matkan pituudesta:');
+    const updatedDepartureTime = prompt('Syötä uusi lähtöaika:');
+    const updatedEstimatedMileage = prompt('Syötä uusi arvio matkan pituudesta:');
 
-  fetch(`/usage/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      departureTime: updatedDepartureTime,
-      estimatedMileage: updatedEstimatedMileage
-    }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => {
-    if (response.ok) {
-      // Update the row with the new values
-      row.querySelector('td:nth-child(1)').textContent = updatedDepartureTime;
-      row.querySelector('td:nth-child(2)').textContent = updatedEstimatedMileage;
-      row.querySelector('td:nth-child(3)').textContent = updatedNeededHours;
-      row.querySelector('td:nth-child(4)').textContent = updatedAveragePrice;
-      location.reload();
-    } else {
-      console.log('Päivitys epäonnistui');
-      location.reload();
-    }
-  })
-  .catch(error => console.log(error));
-}
+    fetch(`/usage/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        departureTime: updatedDepartureTime,
+        estimatedMileage: updatedEstimatedMileage
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          // Update the row with the new values
+          row.querySelector('td:nth-child(1)').textContent = updatedDepartureTime;
+          row.querySelector('td:nth-child(2)').textContent = updatedEstimatedMileage;
+          row.querySelector('td:nth-child(3)').textContent = updatedNeededHours;
+          row.querySelector('td:nth-child(4)').textContent = updatedAveragePrice;
+          location.reload();
+        } else {
+          console.log('Päivitys epäonnistui');
+          location.reload();
+        }
+      })
+      .catch(error => console.log(error));
+  }
 
 </script>
 
-<br>
+{{!-- <br>
 <h2>Menneet lähdöt ja niihin liittyvä tieto:</h2>
 <table>
   <thead>
@@ -91,18 +127,52 @@ function updateUsage(id) {
       <th>Arvioitu matka kilometreissä</th>
       <th>Lataustunnit</th>
       <th>Keskihinta</th>
+      <th>Lämpötila</th>
     </tr>
   </thead>
   <tbody>
     {{!-- {{#each usageInfo}} --}}
+{{!--     {{#each usagePast}}
+    <tr>
+      <td>{{this.departureTime}}</td>
+      <td>{{this.estimatedMileage}}</td>
+      <td>{{this.neededHours}}</td>
+      <td>{{this.averagePrice}}</td>
+      <td>{{this.temperature}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table> --}}
+
+
+<div id="past_usage_info">
+  <caption><h2>Menneet lähdöt ja niihin liittyvä tieto:</h2></caption>
+</div>
+<table role="table">
+  <thead>
+    <tr role="row">
+      <th role="columnheader">Lähtöaika</th>
+      <th role="columnheader">Arvioitu matka kilometreissä</th>
+      <th role="columnheader">Lataustunnit</th>
+      <th role="columnheader">Keskihinta</th>
+      <th role="columnheader">Lämpötila</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
     {{#each usagePast}}
-      <tr>
-        <td>{{this.departureTime}}</td>
-        <td>{{this.estimatedMileage}}</td>
-        <td>{{this.neededHours}}</td>
-        <td>{{this.averagePrice}}</td>
-        <td>{{this.temperature}}</td>
-      </tr>
+    <tr role="row">
+      <td role="cell">{{this.departureTime}}</td>
+      <td role="cell">{{this.estimatedMileage}}</td>
+      <td role="cell">{{this.neededHours}}</td>
+      <td role="cell">{{this.averagePrice}}</td>
+      <td role="cell">{{this.temperature}}</td>
+      <td role="cell">
+      </td>
+    
+    </tr>
+    <tr role="row"></tr>
     {{/each}}
   </tbody>
 </table>

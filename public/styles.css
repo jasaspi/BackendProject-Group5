@@ -1,4 +1,3 @@
-
 /* Tämä demonstroi aktiivista linkkiä, muutetaan nätimmäksi myöhemmin */
 li.active {
     background-color: #E7EBEE;
@@ -14,3 +13,29 @@ header .header-image {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+/* Alla taulukkoon kaunistuksia */
+
+
+[role="table"] {  /* jos rooli attribuutti on table */
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 1em;
+  }
+  
+  [role="table"] [role="cell"], 
+  [role="table"] [role="columnheader"] {
+    display: table-cell;
+    padding: 0.125em 0.25em;
+    width: 10em;
+  }
+  
+  [role="table"] [role="columnheader"] {
+    font-weight: bold;
+    border-bottom: thin solid #00b661;
+  }
+
+
+/* Taulukkorivit loppuvat */
