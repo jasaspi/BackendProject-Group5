@@ -9,18 +9,19 @@
 
         {{#if isAuthenticated}}
         <li class="nav-item {{#if active.results}}active{{/if}}" >
-          <a class="nav-link" href="/results">Aseta</a>
+          <a class="nav-link" {{#if active.results}}aria-current="page" {{/if}} href="/results">Aseta</a>
         </li>
         
         <li class="nav-item {{#if active.history}}active{{/if}}" >
-          <a class="nav-link" href="/history">Käyttäjän tiedot</a>
+          <a class="nav-link" {{#if active.history}}aria-current="page" {{/if}} 
+          href="/history">Käyttäjän tiedot</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Kirjaudu ulos</a>
         </li>
         {{else}}
          <li class="nav-item {{#if active.login}}active" aria-current="page"{{/if}} >
-          <a class="nav-link" href="/login">Kirjaudu</a>
+          <a class="nav-link" {{#if active.login}}aria-current="page" {{/if}} href="/login">Kirjaudu</a>
         </li>
         {{/if}}
        
