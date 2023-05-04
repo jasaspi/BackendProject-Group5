@@ -92,15 +92,26 @@
   function updateUsage(id) {
     const row = document.querySelector(`tr[data-id="${id}"]`);
 
-    const updatedDepartureTime = prompt('Syötä uusi lähtöaika:');
-    const updatedEstimatedMileage = prompt('Syötä uusi arvio matkan pituudesta:');
-    const updatedLocation = prompt('Syötä uusi lähtöpaikka:');
+    let updatedDepartureTime = '';
+    while (!updatedDepartureTime || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(updatedDepartureTime)) {
+      updatedDepartureTime = prompt('Syötä uusi lähtöaika (muodossa YYYY-MM-DDTHH:MM:SS):');
+    }
+
+    let updatedEstimatedMileage = '';
+    while (!updatedEstimatedMileage || isNaN(updatedEstimatedMileage) || parseInt(updatedEstimatedMileage) !== parseFloat(updatedEstimatedMileage)) {
+      updatedEstimatedMileage = prompt('Syötä uusi arvio matkan pituudesta (kokonaisluku):');
+    }
+
+    let updatedLocation = '';
+    while (!updatedLocation) {
+      updatedLocation = prompt('Syötä uusi lähtöpaikka:');
+    }
 
     fetch(`/usage/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         departureTime: updatedDepartureTime,
-        estimatedMileage: updatedEstimatedMileage,
+        estimatedMileage: parseInt(updatedEstimatedMileage),
         location: updatedLocation
       }),
       headers: {
@@ -117,6 +128,7 @@
       })
       .catch(error => console.log(error));
   }
+
 
 </script>
 
