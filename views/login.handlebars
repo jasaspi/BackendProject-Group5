@@ -7,7 +7,7 @@
 {{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
   <div class="errors" role="alert" aria-relevant="all">
     {{#if messages.error}}
-  <p>{{messages.error}}</p>
+  <p id="error">{{messages.error}}</p>
   {{/if}}
   </div>
 
@@ -15,11 +15,11 @@
     <form action="/login" method="POST">
       <div class="mb-3">
       <label for="username">Käyttäjätunnus:</label><br />
-      <input type="text" id="username" name="username" aria-required="true" placeholder="Username" /><br />
+      <input type="text" id="username" name="username" aria-required="true" placeholder="Käyttäjätunnus" /><br />
       </div>
       <div class="mb-3">
       <label for="password">Salasana:</label><br />
-      <input type="password" id="password" name="password" aria-required="true" placeholder="Password"/><br /><br />
+      <input type="password" id="password" name="password" aria-required="true" placeholder="Salasana"/><br /><br />
       </div>
       <button type="submit">Kirjaudu sisään</button>
     </form>

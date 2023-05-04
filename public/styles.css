@@ -96,7 +96,10 @@ h3 {
     padding-bottom: 1em;
   }
  
-  
-  
 
 /* Taulukkorivit loppuvat */
+
+#error {
+  color: red;
+  font-weight: bold;
+}
