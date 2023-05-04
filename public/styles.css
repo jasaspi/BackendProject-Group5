@@ -1,3 +1,7 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 /* Alla header + navbar tyylit */
 
 header .header-image {
@@ -99,7 +103,12 @@ h3 {
 
 /* Taulukkorivit loppuvat */
 
+
 #error {
   color: red;
   font-weight: bold;
+}
+
+#estimatedmileage, #departuretime, #location {
+  width: 205px;
 }
