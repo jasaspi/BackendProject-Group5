@@ -166,11 +166,57 @@ app.delete('/usage/:id', checkAuthenticated, async (req, res) => {
   }
 });
 
+
+//Update
 app.patch('/usage/:id', checkAuthenticated, async (req, res) => {
   const usageId = req.params.id;
   const updatedUsage = req.body;
 
+  const apiUrl = 'https://api.porssisahko.net/v1/latest-prices.json';
+  const location = req.body.location.replace(/[^a-zA-Z\s]/g, '');
+
   try {
+    const temperature = await getTemperature(location, options);
+    console.log(req.body);
+
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    const tempTime = Date.parse(req.body.departureTime);
+    data.prices.sort((a, b) => a.endDate - b.endDate);// check last known time for price - data.prices[0]
+    const twelveHoursPrior = new Date(tempTime - 12 * 60 * 60 * 1000).toISOString();
+    const filteredHours = data.prices.filter(item => item.startDate >= twelveHoursPrior);
+    const estimatedMileage = parseInt(req.body.estimatedMileage);
+    let neededHours = 0;
+    if (estimatedMileage < 100) {
+      neededHours = 1;
+    } else if (estimatedMileage >= 101 && estimatedMileage <= 200) {
+      neededHours = 2;
+    } else if (estimatedMileage >= 201 && estimatedMileage <= 300) {
+      neededHours = 3;
+    } else if (estimatedMileage >= 301 && estimatedMileage <= 400) {
+      neededHours = 4;
+    } else {
+      neededHours = 5;
+    }
+
+    const sortedData = filteredHours.sort((a, b) => a.price - b.price);
+    chosenHours = sortedData.slice(0, neededHours);
+
+    let sum = 0;
+    for (let i = 0; i < chosenHours.length; i++) {
+      sum += chosenHours[i].price;
+    }
+
+    temp = sum / chosenHours.length;
+    averagePrice = temp.toFixed(3);
+    console.log('Average price:', temp.toFixed(3));
+    updatedUsage.temperature = temperature;
+    updatedUsage.neededHours = neededHours;
+    updatedUsage.averagePrice = (sum / chosenHours.length).toFixed(3);
+
+    console.log(updatedUsage);
+
     const result = await usage_db.model('Usage').findByIdAndUpdate(usageId, updatedUsage);
     res.sendStatus(200);
   } catch (err) {
@@ -178,8 +224,6 @@ app.patch('/usage/:id', checkAuthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-
 
 // Show results page -- Tälle sivulle pääsee vain kirjautuneena
 app.get('/results', checkAuthenticated, (req, res) => {

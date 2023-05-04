@@ -3,41 +3,16 @@
 <div class="container d-flex justify-content-center">
     <div class="row">
         <div class="col">
-
-          
-
-{{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
-<form action="/results" method="POST">
-  <label for="departuretime">Lähtöaika:</label><br />
-  <input type="datetime-local" id="departuretime" name="departuretime" aria-required="true" /><br /><br />
-  <label for="estimatedmileage">Arvioitu matka (km):</label><br />
-  <input type="text" id="estimatedmileage" name="estimatedmileage" aria-required="true" placeholder="kilometrit" /><br /><br />
-  <label for="location">Paikkakunta:</label><br />
-  <input type="text" name="location" id="location" aria-required="true" placeholder="Anna paikkakunta" ><br /><br />
-  <button type="submit">Hae tarvittavat lataustunnit</button>
-</form>
-
-
-
-<!--
-<h2>Lataukset</h2>
-<p>Valitut tunnit seuraavaa lähtöhetkeä varten:</p>
-{{#if chosenHours}}
-<ul>
-  {{#each chosenHours}}
-  <li>{{this.startDate}} - {{this.endDate}}: {{this.price}} EUR/MWh</li>
-  {{/each}}
-</ul>
-{{else}}
-<p>Tunteja ei voitu hakea, yritä uudelleen myöhemmin</p>
-{{/if}}
-
-<p>Lähtöaika (UTC):</p>
-{{this.departureTimeOut}}
-
-<h1>{{location}} {{temperature}} </h1>
--->
-
+        {{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
+        <form action="/results" method="POST">
+          <label for="departuretime">Lähtöaika:</label><br />
+          <input type="datetime-local" id="departuretime" name="departuretime" aria-required="true" /><br /><br />
+          <label for="estimatedmileage">Arvioitu matka (km):</label><br />
+          <input type="text" id="estimatedmileage" name="estimatedmileage" aria-required="true" placeholder="kilometrit" /><br /><br />
+          <label for="location">Paikkakunta:</label><br />
+          <input type="text" name="location" id="location" aria-required="true" placeholder="Anna paikkakunta" ><br /><br />
+          <button type="submit">Hae tarvittavat lataustunnit</button>
+        </form>
        </div>
     </div>
 </div>

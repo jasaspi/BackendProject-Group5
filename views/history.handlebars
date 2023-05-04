@@ -94,12 +94,14 @@
 
     const updatedDepartureTime = prompt('Syötä uusi lähtöaika:');
     const updatedEstimatedMileage = prompt('Syötä uusi arvio matkan pituudesta:');
+    const updatedLocation = prompt('Syötä uusi lähtöpaikka:');
 
     fetch(`/usage/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         departureTime: updatedDepartureTime,
-        estimatedMileage: updatedEstimatedMileage
+        estimatedMileage: updatedEstimatedMileage,
+        location: updatedLocation
       }),
       headers: {
         'Content-Type': 'application/json'
@@ -107,11 +109,6 @@
     })
       .then(response => {
         if (response.ok) {
-          // Update the row with the new values
-          row.querySelector('td:nth-child(1)').textContent = updatedDepartureTime;
-          row.querySelector('td:nth-child(2)').textContent = updatedEstimatedMileage;
-          row.querySelector('td:nth-child(3)').textContent = updatedNeededHours;
-          row.querySelector('td:nth-child(4)').textContent = updatedAveragePrice;
           location.reload();
         } else {
           console.log('Päivitys epäonnistui');

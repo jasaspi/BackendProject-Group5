@@ -6,6 +6,7 @@ const UsageSchema = new mongoose.Schema({
   estimatedMileage: { type: Number },
   neededHours: { type: Number },
   averagePrice: { type: Number },
+  temperature: { type: String},
 });
 
 module.exports = mongoose.model('Usage', UsageSchema);
