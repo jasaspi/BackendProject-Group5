@@ -79,10 +79,17 @@ h3 {
     
   }
 
-   @media screen and (max-width: 600px) {  
+  [role="table"] [role="row"] { /* flex pienillä näytöillä */
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+
+   @media screen and (max-width: 600px) {  /* mobiiliin */
     [role="table"] [role="cell"], 
     [role="table"] [role="columnheader"] {
-      width: 5em;
+      width: 4em;
       font-size: 0.8em;
     }
 
