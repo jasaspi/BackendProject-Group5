@@ -4,15 +4,36 @@
     <div class="row">
         <div class="col">
         {{!--Lisätty saavutettavuus WAI-ARIAN mukaan--}}
-        <form action="/results" method="POST">
+        <form id="inputForm" action="/results" method="POST">
           <label for="departuretime">Lähtöaika:</label><br />
           <input type="datetime-local" id="departuretime" name="departuretime" aria-required="true" /><br /><br />
           <label for="estimatedmileage">Arvioitu matka (km):</label><br />
           <input type="text" id="estimatedmileage" name="estimatedmileage" aria-required="true" placeholder="kilometrit" /><br /><br />
           <label for="location">Paikkakunta:</label><br />
           <input type="text" name="location" id="location" aria-required="true" placeholder="Anna paikkakunta" ><br /><br />
-          <button type="submit">Hae tarvittavat lataustunnit</button>
+          <button type="submit" id="submitBtn">Hae tarvittavat lataustunnit</button>
         </form>
        </div>
     </div>
 </div>
+
+<script>
+    const form = document.getElementById('inputForm');
+    form.addEventListener('submit', handleSubmit);
+
+    function handleSubmit(event) {
+        const departureTimeInput = document.getElementById('departuretime');
+        const departureTime = new Date(departureTimeInput.value);
+        const now = new Date();
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        const future = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
+
+        if (departureTime < now) {
+          event.preventDefault();
+          alert('Lähtöaika ei voi olla menneisyydessä.');
+        } else if (departureTime > future) {
+          event.preventDefault();
+          alert('Lähtöaika ei voi olla huomisen jälkeen. Sähkötiedot eivät ole vielä saatavilla');
+        }
+    }
+</script>
