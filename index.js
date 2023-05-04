@@ -284,6 +284,7 @@ app.post('/results', checkAuthenticated, function(req, res) {
       const twelveHoursPrior = new Date(departureTime - 12 * 60 * 60 * 1000).toISOString();
       const filteredHours = data.prices.filter(item => item.startDate >= twelveHoursPrior);
       const estimatedMileage = parseInt(req.body.estimatedmileage);
+      let neededHours = 0;
       if (estimatedMileage < 100) {
         neededHours = 1;
       } else if (estimatedMileage >= 101 && estimatedMileage <= 200) {
