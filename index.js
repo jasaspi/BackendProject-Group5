@@ -8,7 +8,6 @@ const getTemperature = weather.getTemperature;
 const options = weather.options;
 
 
-// Jonna added ones below to make mongo + user auth working
 const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -57,18 +56,25 @@ app.use(passport.initialize());
 app.use(passport.session());
   
 authUser = async (user, password, done) =>  {
-  const ourUser = await User.findOne({ username: user });
-  if (ourUser) {
+  try {
+    const ourUser = await User.findOne({ username: user });
+    if (ourUser) {
       //check if password matches
       const result = password === ourUser.password;
       if (result) {
         return done (null, ourUser);
       } else {
-        return done (null, false, { message : "Password incorrect"});
+        return done (null, false, { message : "Väärä salasana!"});
       }
     } else {
-      return done (null, false, { message : "User not found" });
+      return done (null, false, { message : "Käyttäjää ei löydy!" });
     }
+
+  }
+  catch (error) {
+    console.log(error);
+  }
+  
   
 }
 
