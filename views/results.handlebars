@@ -33,7 +33,7 @@
           alert('Lähtöaika ei voi olla menneisyydessä.');
         } else if (now.getHours() < 14 && departureTime > tomorrow) {
           event.preventDefault();
-          alert('Aseta huominen lähtöaika vasta 14:00 jälkeen, jotta sähkön hintatiedot ovat saatavilla');
+          alert('Aseta seuraavan päivän lähtöaika vasta 14:00 jälkeen, jotta sähkön hintatiedot ovat saatavilla');
         } else if (departureTime > future) {
           event.preventDefault();
           alert('Lähtöaika ei voi olla huomisen jälkeen. Sähkötiedot eivät ole vielä saatavilla');
