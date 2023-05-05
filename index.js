@@ -69,13 +69,10 @@ authUser = async (user, password, done) =>  {
     } else {
       return done (null, false, { message : "Käyttäjää ei löydy!" });
     }
-
   }
   catch (error) {
     console.log(error);
-  }
-  
-  
+  }  
 }
 
 passport.use(new LocalStrategy(authUser));
@@ -252,8 +249,7 @@ app.get('/logout', function (req, res) {
       else {
           req.session.destroy();
           res.redirect('/login');
-      }
-      
+      }      
     });
 });
 
@@ -315,8 +311,6 @@ app.post('/results', checkAuthenticated, function(req, res) {
       temp = sum / chosenHours.length;
       averagePrice = temp.toFixed(3);
       console.log('Average price:', temp.toFixed(3));
-      
-      
 
       const usageData = {
         user: req.user?.username,
@@ -334,7 +328,6 @@ app.post('/results', checkAuthenticated, function(req, res) {
       const usage = new Usage(usageData);
       usage.save()
         .then(() => {
-          //console.log("Tiedot tallennettiin onnistuneesti");
           res.redirect("/history");
         })
         .catch((err) => {
